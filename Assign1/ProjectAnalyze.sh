@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# Using sleep and for-loops, I simulate a retro style loading screen.
+
 echo ""
 
 for (( i = 1 ; i <= 89 ; i++ )); do
@@ -35,6 +39,8 @@ for (( i = 1 ; i <= 89 ; i++ )); do
 done
 
 read input
+
+# This is my amazing menu. You can pick what you wanna do from here. It looks.
 
 echo "
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -82,6 +88,8 @@ then
     echo "Comparing Local Repo With Remote Repo"
     echo 2s
     
+    ## These two commands compare the local repo with the remote repo"
+
     git fetch
     git status
     
@@ -90,7 +98,7 @@ then
 
     if [ "$gitPull" == "y" ]
     then
-        git pull
+        git pull # This updates the local repo to match the remote repo
     else
         echo "Okay, I won't pull anything"
     fi
@@ -100,7 +108,7 @@ then
     echo "Putting All Uncommitted Changes In A File"
     sleep 2s
 
-    git diff > changes.log
+    git diff > changes.log # Puts all uncommitted changes in a file called "changes.log"
     
     echo "Do you wanna see the changes you've made? (y/n)"
     read gitDiff
@@ -118,7 +126,8 @@ then
     echo "Extracting #TODO Text From All Projects"
     sleep 2s
 
-    grep -r --exclude=README.md --exclude=ProjectAnalyze.sh --exclude=todo.log "#TODO" . > "todo.log"
+    # Using grep, this puts all TODO text in a file called "todo.log", but it excludes files like Readme, ProjectAnalyze, and Todo because it's pointless and redundant
+    grep -r --exclude=README.md --exclude=ProjectAnalyze.sh --exclude=todo.log "#TODO" . > "todo.log" 
 
     echo "Do you want to see all the stuff you need To Do? (y/n)"
     read grepTodo
@@ -136,7 +145,7 @@ then
     echo "Checking Haskell Files For Syntax Errors"
     sleep 2s
 
-    find . -name "*.hs" -exec ghc -fno-code {} \; &> error.log
+    find . -name "*.hs" -exec ghc -fno-code {} \; &> error.log # Checks all Haskell files for error and puts them in file called "error.log"
 
     echo "Do you wanna see all the mistakes you may or may not have made? (y/n)"
     read mistakes
@@ -173,6 +182,8 @@ elif [ $selection == 6 ]
 then
     echo "Answering Deep Philosophical Questions About Life"
     sleep 2s
+
+# This bunny deserves an A+
 
 echo "
 
@@ -247,7 +258,7 @@ T H I N K   O F   T H E   B U N N Y   :(
     then
         echo "Good Answer! You Saved The Bunny!"
     else
-        echo "Tsk. Tsk. WWF Is Disappointed"
+        echo "Tsk. Tsk. WWF Is Disappointed" # WWF = World Wildlife Fund ... In case you didn't know ... Cuz I didn't
         sudo shutdown -r now
     fi
 
