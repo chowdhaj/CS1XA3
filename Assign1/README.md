@@ -32,3 +32,7 @@ This feature was added for the lulz and the bantz. Please don't take it personal
 ### It's simple, elegant, and gets the job done. Somebody give this man an A++.
 
 ***
+
+### Shoutout to Curtis’ Notes. The PPTs are full of USEFUL knowledge. Thank you, Curtis.
+
+***
