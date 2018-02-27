@@ -1,5 +1,5 @@
 ***
-# |___1 X A 3___|___A S S I G N 1___|___C H O W D H A J___| 
+# |___ 1 X A 3 ___|___ A S S I G N 1 ___|___ C H O W D H A J ___| 
 ***
 
 ## [1] Compares The Local Repo With The Remote Repo
