@@ -1,5 +1,6 @@
+***
 |   1 X A 3   |   A S S I G N 1   |   C H O W D H A J   | 
-=========================================================
+***
 
 ## [1] Compares The Local Repo With The Remote Repo
 This informs you if you're local repo is up to date with the remote repo. The local repo being the one on your machine, and the remote repo is the one on Github. This command should be the first thing you run when working with repositories and Git in general. Also, it asks if you want to update your local repo by downloading the remote repo.
