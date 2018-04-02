@@ -221,6 +221,19 @@ styleTitle =
           ("margin", "0px 485px 0px 485px")
         ]
 
+
+styleFort : Attribute msg
+styleFort =
+    style
+        [ 
+          ("backgroundColor", "black"),
+          ("font-size","8px"),
+          ("color", "white"),
+          ("padding", "0px 0px 0px 0px"),
+          ("display", "inline-block"),
+          ("margin", "0px 0px 0px 0px")
+        ]
+
 view : Model -> Html Msg
 view model =
     div []
@@ -265,7 +278,7 @@ view model =
         , div []
             [
               h1 [styleTitle] [text "MY DOPE CALCULATOR"]
-            , p [] [text "P.S. Fortnite Is Better Than PUBG"]
+            , p [styleFort] [text "P.S. Fortnite Is Better Than PUBG"]
             ]
     ]
 
