@@ -8,7 +8,6 @@ It is simple, elegant, yet powerful and effective. It gets the point across with
 ...Special thanks to the following people:
 
 ...1. Joe Bloggs --> For His [Styling Sheet](http://www.bloggs.com/ "Joe's Website"). It’s simple yet effective.
-
 ...2. Google     --> For Providing Countless Examples Of Resumes/CVs
 
 ## [2] Elm App
