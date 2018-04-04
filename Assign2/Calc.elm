@@ -5,237 +5,219 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import String exposing (..)
 
-
 main : Program Never Model Msg
-main =
-    beginnerProgram
-        { model = init
-        , view = view
-        , update = update
-        }
+main = beginnerProgram { 
+    model = init,
+    view = display,
+    update = refresh }
 
+{- MODEL -}
 
+type alias Calc = { 
+    addition : Float -> Float -> Float,
+    subtraction : Float -> Float -> Float,
+    multiplication : Float -> Float -> Float,
+    floatDivision : Float -> Float -> Float,
+    power : Float -> Float -> Float,
+    root : Float -> Float -> Float,  
+    plusTax : Float -> Float -> Float, 
+    minusTax : Float -> Float -> Float,
+    totalTax : Float -> Float -> Float,
+    combinatrix : Float -> Float -> Float }
+    -- intDivision : Float -> Float -> Float }
 
--- MODEL
+operations : Calc
+operations = { 
+    addition = (\x y -> x + y), 
+    subtraction = (\x y -> x - y),
+    multiplication = (\x y -> x * y),
+    floatDivision = (\x y -> x / y),
+    power = (\x y -> x ^ y),
+    root = (\x y -> x ^ (1/y)), 
+    plusTax = (\x y -> x * (y/100)), 
+    minusTax = (\x y -> x - (x * (y/100))),
+    totalTax = (\x y -> x + (x * (y/100))),
+    combinatrix = (\x y -> check x y) }
+    -- intDivision = (\x y -> x // y) }
 
-type alias Calculator =
-    { add : Float -> Float -> Float
-    , minus : Float -> Float -> Float
-    , times : Float -> Float -> Float
-    , divide : Float -> Float -> Float
-    }
-
-
-calculator : Calculator
-calculator =
-    { add = (\x y -> x + y)
-    , minus = (\x y -> x - y)
-    , times = (\x y -> x * y)
-    , divide = (\x y -> x / y)
-    }
-
-
-type alias Model =
-    { display : String
-    , function : Float -> Float -> Float
-    , lastValue : Float
-    , append : Bool
-    }
+type alias Model = { 
+    screen : String, 
+    func : Float -> Float -> Float, 
+    answer : Float,
+    group : Bool }
 
 
 init : Model
-init =
-    { display = ""
-    , function = (\x y -> y)
-    , lastValue = 0
-    , append = True
-    }
+init = { 
+    screen = "", 
+    func = (\x y -> y), 
+    answer = 0, 
+    group = True }
 
-
-parseFloat : String -> Float
-parseFloat input =
-    Result.withDefault 0 (String.toFloat input)
-
+parseAnswer : String -> Float
+parseAnswer ans = Result.withDefault 0 (String.toFloat ans)
 
 operation : Model -> (Float -> Float -> Float) -> Model
-operation model function =
-    { model
-        | function = function
-        , lastValue = (parseFloat model.display)
-        , append = False
-    }
+operation model func = { 
+    model
+      | func = func,
+        answer = (parseAnswer model.screen),
+        group = False }
 
-
-
---update
+{- UPDATE/REFRESH -}
 
 type Msg
     = None
     | Divide
-    | Times
-    | Minus
-    | Add
+    -- | Integer
+    | Combo
+    | Root
+    | Power
+    | Multiply
+    | Subtract
+    | Plus
+    | PlusTax
+    | TotalTax
+    | MinusTax
     | Equal
     | Decimal
     | Zero
     | Number Int
     | Clear
 
-
-update : Msg -> Model -> Model
-update msg model =
+refresh : Msg -> Model -> Model
+refresh msg model =
     case msg of
-        None ->
-            model
+        None -> model
 
-        Clear ->
-            init
+        Clear -> init
 
-        Number number ->
-            updateDisplay model number
+        Number number -> refreshAnswer model number
 
-        Decimal ->
-            decimal model
+        Decimal -> decimal model
 
-        Zero ->
-            zero model
+        Zero -> zero model
 
-        Divide ->
-            operation model calculator.divide
+        Divide -> operation model operations.floatDivision
 
-        Times ->
-            operation model calculator.times
+        --Integer -> operation model operations.intDivision
 
-        Minus ->
-            operation model calculator.minus
+        Combo -> operation model operations.combinatrix
 
-        Add ->
-            operation model calculator.add
+        Power -> operation model operations.power
 
-        Equal ->
-            equal model
+        Root -> operation model operations.root
 
+        PlusTax -> operation model operations.plusTax
 
-updateDisplay : Model -> Int -> Model
-updateDisplay model number =
-    if model.append then
-        { model | display = model.display ++ toString (number) }
-    else
-        { model | display = toString (number), append = True }
+        MinusTax -> operation model operations.minusTax
 
+        TotalTax -> operation model operations.totalTax
+
+        Multiply -> operation model operations.multiplication
+
+        Subtract -> operation model operations.subtraction
+
+        Plus -> operation model operations.addition
+
+        Equal -> equal model
+
+refreshAnswer : Model -> Int -> Model
+refreshAnswer model number = if model.group then { 
+    model | screen = model.screen ++ toString (number) }
+  else {
+    model | screen = toString (number), group = True }
 
 equal : Model -> Model
-equal model =
-    if model.append then
-        { model
-            | display = calculate model
-            , lastValue = (parseFloat model.display)
-            , append = False
-        }
-    else
-        { model
-            | display = calculate model
-            , append = False
-        }
+equal model = 
+    if model.group then { 
+        model
+          | screen = calc model, 
+            answer = (parseAnswer model.screen), 
+            group = False }
+    else { 
+        model
+          | screen = calc model,
+            group = False }
 
-
-calculate : Model -> String
-calculate model =
-    model.function model.lastValue (parseFloat model.display) |> toString
-
+calc : Model -> String
+calc model = model.func model.answer (parseAnswer model.screen) |> toString
 
 zero : Model -> Model
 zero model =
-    if String.isEmpty model.display || not model.append then
-        { model
-            | display = "0"
-            , append = False
-        }
-    else
-        { model | display = model.display ++ "0" }
-
+    if String.isEmpty model.screen || not model.group then { 
+        model
+          | screen = "0", 
+          group = False }
+    else { 
+        model 
+          | screen  = model.screen ++ "0" }
 
 decimal : Model -> Model
 decimal model =
-    if not (String.isEmpty model.display) && model.append then
-        { model | display = appendDecimal model.display }
-    else
-        { model | display = "0.", append = True }
+    if not (String.isEmpty model.screen) && model.group then { 
+        model 
+          | screen = addDecimal model.screen }
+    else { 
+        model 
+          | screen = "0.", group = True }
 
-
-appendDecimal : String -> String
-appendDecimal string =
+addDecimal : String -> String
+addDecimal string =
     if String.contains "." string then
         string
     else
         string ++ "."
 
+{- VIEW -}
 
-
--- VIEW
-
-calculatorButton : Msg -> String -> Html Msg
-calculatorButton msg buttonText =
+action : Msg -> String -> Html Msg
+action msg buttonText =
     button [ class "button", onClick msg ]
         [ span [] [ text (buttonText) ] ]
 
-
-calculatorButtonWide : Msg -> String -> Html Msg
-calculatorButtonWide msg buttonText =
+actionWide : Msg -> String -> Html Msg
+actionWide msg buttonText =
     button [ class "button wide", onClick msg ]
         [ span [] [ text (buttonText) ] ]
 
-calculatorButtonHeight : Msg -> String -> Html Msg
-calculatorButtonHeight msg buttonText =
+actionHeight : Msg -> String -> Html Msg
+actionHeight msg buttonText =
     button [ class "button height", onClick msg ]
         [ span [] [ text (buttonText) ] ]
 
 stylesheet : Html Msg
-stylesheet =
-    let
-        tag =
-            "link"
-
-        attrs =
-            [ attribute "Rel" "stylesheet"
-            , attribute "property" "stylesheet"
-            , attribute "href" "styles.css"
-            ]
-
-        children =
-            []
-    in
-        node tag attrs children
+stylesheet = let
+    tag = "link"
+    attrs = [ 
+        attribute "Rel" "stylesheet", 
+        attribute "property" "stylesheet",
+        attribute "href" "styles.css" ]
+    children = []
+  in node tag attrs children
 
 styleTitle : Attribute msg
-styleTitle =
-    style
-        [ 
-          ("backgroundColor", "black"),
-          ("font-size","40px"),
-          ("color", "white"),
-          ("font-family", "Arial"),
-          ("textAlign", "center"),
-          --("height", "45px"),
-          ("padding", "20px 0px 20px 0px"),
-          ("margin", "0px 485px 0px 485px")
-        ]
-
+styleTitle = style [ 
+    ("backgroundColor", "black"),
+    ("font-size","40px"),
+    ("color", "white"),
+    ("font-family", "Arial"),
+    ("textAlign", "center"),
+    --("height", "45px"),
+    ("padding", "30px 0px 30px 0px"),
+    ("margin", "0px 480px 0px 480px") ]
 
 styleFort : Attribute msg
-styleFort =
-    style
-        [ 
-          ("backgroundColor", "black"),
-          ("font-size","8px"),
-          ("color", "white"),
-          ("padding", "0px 0px 0px 0px"),
-          ("display", "inline-block"),
-          ("margin", "0px 0px 0px 0px")
-        ]
+styleFort = style [ 
+    ("backgroundColor", "black"),
+    ("font-size","8px"),
+    ("color", "white"),
+    ("padding", "0px 0px 0px 0px"),
+    ("display", "inline-block"),
+    ("margin", "0px 0px 0px 0px") ]
 
-view : Model -> Html Msg
-view model =
+display : Model -> Html Msg
+display model =
     div []
         [
           h1 [styleTitle] [text "MY DOPE CALCULATOR"]
@@ -245,32 +227,35 @@ view model =
             [ div [ class "col-xs-12" ]
                 [ div [ class "display" ]
                     [ div [ class "display-text" ]
-                        [ text (model.display) ]
+                        [ text (model.screen) ]
                     ]
                 , div [ class "buttons" ]
-                    [ calculatorButton (Number 1) "1" 
-                    , calculatorButton (Number 2) "2"
-                    , calculatorButton (Number 3) "3"
-                    , calculatorButton (Number 4) "4"
-                    , calculatorButton (Number 5) "5"
-                    , calculatorButton (Number 6) "6"
-                    , calculatorButton (Number 7) "7"
-                    , calculatorButton (Number 8) "8"
-                    , calculatorButton (Number 9) "9"
-                    , calculatorButton Add "+"
-                    , calculatorButton Minus "-"
-                    , calculatorButton Zero "0"
-                    , calculatorButton Times "x"
-                    , calculatorButton Divide "÷"
-                    , calculatorButton Decimal "."
-                    , calculatorButton Add "√"
-                    , calculatorButton Add "3√"
-                    , calculatorButton Add "4√"
-                    , calculatorButton Add "Prime #?"
-                    , calculatorButton Add "Even #?"
-                    , calculatorButton Add "Odd #?"
-                    , calculatorButtonHeight Equal "="
-                    , calculatorButtonWide Clear "RESET"
+                    [ action (Number 1) "1" 
+                    , action (Number 2) "2"
+                    , action (Number 3) "3"
+                    , action (Number 4) "4"
+                    , action (Number 5) "5"
+                    , action (Number 6) "6"
+                    , action (Number 7) "7"
+                    , action (Number 8) "8"
+                    , action (Number 9) "9"
+                    , action Plus "+"
+                    , action Subtract "-"
+                    , action Zero "0"
+                    , action Multiply "x"
+                    , action Divide "÷"
+                    , action Decimal "."
+                    , action Power "x ^ y"
+                    , action Root "x√y"
+                    , action Combo "nCr"
+                    , action PlusTax "Tax"
+                    , action MinusTax "Minus Tax"
+                    , action TotalTax "Total Tax"
+                    --, action Add "Prime #?"
+                    --, action Add "Even #?"
+                    --, action Add "Odd #?"
+                    , actionHeight Equal "="
+                    , actionWide Clear "RESET"
                     ]
                 ]
             ]
@@ -282,7 +267,22 @@ view model =
             ]
     ]
 
+{- HELPER FUNCTIONS -}
 
+mod : Int -> Int -> Float
+mod x y = Basics.toFloat(x % y)
 
+toFloa : Int -> Float
+toFloa x = Basics.toFloat(x)
 
+check x y = if x < y then 0 else combinatorics x y
 
+combinatorics : Float -> Float -> Float
+combinatorics x y = let
+    factX = factorial x
+    factY = factorial y
+    factB = factorial (x - y)
+  in (factX / (factY * factB))
+
+factorial : Float -> Float
+factorial n = if n == 0 then 1 else n * factorial (n - 1)
