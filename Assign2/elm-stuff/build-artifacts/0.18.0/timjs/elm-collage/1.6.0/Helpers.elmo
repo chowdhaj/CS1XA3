@@ -1,0 +1,15 @@
+var _timjs$elm_collage$Helpers$foldrLazy = F3(
+	function (f, acc, list) {
+		var _p0 = list;
+		if (_p0.ctor === '[]') {
+			return acc;
+		} else {
+			return A2(
+				f,
+				_p0._0,
+				function (_p1) {
+					var _p2 = _p1;
+					return A3(_timjs$elm_collage$Helpers$foldrLazy, f, acc, _p0._1);
+				});
+		}
+	});

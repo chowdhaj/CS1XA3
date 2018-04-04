@@ -1,0 +1,291 @@
+var _timjs$elm_collage$Collage$ultrathick = 8.0;
+var _timjs$elm_collage$Collage$verythick = 6.0;
+var _timjs$elm_collage$Collage$thick = 4.0;
+var _timjs$elm_collage$Collage$semithick = 3.0;
+var _timjs$elm_collage$Collage$thin = 2.0;
+var _timjs$elm_collage$Collage$verythin = 1.0;
+var _timjs$elm_collage$Collage$ultrathin = 0.5;
+var _timjs$elm_collage$Collage$transparent = _timjs$elm_collage$Collage_Core$Transparent;
+var _timjs$elm_collage$Collage$uniform = _timjs$elm_collage$Collage_Core$Uniform;
+var _timjs$elm_collage$Collage$html = function (dims) {
+	return function (_p0) {
+		return _timjs$elm_collage$Collage_Core$collage(
+			A2(_timjs$elm_collage$Collage_Core$Html, dims, _p0));
+	};
+};
+var _timjs$elm_collage$Collage$image = function (dims) {
+	return function (_p1) {
+		return _timjs$elm_collage$Collage_Core$collage(
+			A2(_timjs$elm_collage$Collage_Core$Image, dims, _p1));
+	};
+};
+var _timjs$elm_collage$Collage$rendered = function (text) {
+	return _timjs$elm_collage$Collage_Core$collage(
+		A2(
+			_timjs$elm_collage$Collage_Core$Text,
+			{
+				ctor: '_Tuple2',
+				_0: _timjs$elm_collage$Collage_Text$width(text),
+				_1: _timjs$elm_collage$Collage_Text$height(text)
+			},
+			text));
+};
+var _timjs$elm_collage$Collage$close = _timjs$elm_collage$Collage_Core$Loop;
+var _timjs$elm_collage$Collage$traced = F2(
+	function (style, path) {
+		return _timjs$elm_collage$Collage_Core$collage(
+			A2(_timjs$elm_collage$Collage_Core$Path, style, path));
+	});
+var _timjs$elm_collage$Collage$path = _timjs$elm_collage$Collage_Core$Polyline;
+var _timjs$elm_collage$Collage$segment = F2(
+	function (a, b) {
+		return _timjs$elm_collage$Collage$path(
+			{
+				ctor: '::',
+				_0: a,
+				_1: {
+					ctor: '::',
+					_0: b,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _timjs$elm_collage$Collage$line = function (l) {
+	return _timjs$elm_collage$Collage$path(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: (0 - l) / 2, _1: 0},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: l / 2, _1: 0},
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _timjs$elm_collage$Collage$styled = function (style) {
+	return function (_p2) {
+		return _timjs$elm_collage$Collage_Core$collage(
+			A2(_timjs$elm_collage$Collage_Core$Shape, style, _p2));
+	};
+};
+var _timjs$elm_collage$Collage$outlined = function (line) {
+	return _timjs$elm_collage$Collage$styled(
+		{ctor: '_Tuple2', _0: _timjs$elm_collage$Collage$transparent, _1: line});
+};
+var _timjs$elm_collage$Collage$circle = _timjs$elm_collage$Collage_Core$Circle;
+var _timjs$elm_collage$Collage$ellipse = _timjs$elm_collage$Collage_Core$Ellipse;
+var _timjs$elm_collage$Collage$roundedRectangle = _timjs$elm_collage$Collage_Core$Rectangle;
+var _timjs$elm_collage$Collage$roundedSquare = function (size) {
+	return A2(_timjs$elm_collage$Collage$roundedRectangle, size, size);
+};
+var _timjs$elm_collage$Collage$rectangle = F2(
+	function (w, h) {
+		return A3(_timjs$elm_collage$Collage$roundedRectangle, w, h, 0);
+	});
+var _timjs$elm_collage$Collage$square = function (size) {
+	return A2(_timjs$elm_collage$Collage$rectangle, size, size);
+};
+var _timjs$elm_collage$Collage$polygon = _timjs$elm_collage$Collage_Core$Polygon;
+var _timjs$elm_collage$Collage$ngon = F2(
+	function (n, r) {
+		var m = _elm_lang$core$Basics$toFloat(n);
+		var t = (2 * _elm_lang$core$Basics$pi) / m;
+		var f = function (i) {
+			return {
+				ctor: '_Tuple2',
+				_0: r * _elm_lang$core$Basics$cos(
+					(t * _elm_lang$core$Basics$toFloat(i)) + (_elm_lang$core$Basics$pi / 2)),
+				_1: r * _elm_lang$core$Basics$sin(
+					(t * _elm_lang$core$Basics$toFloat(i)) + (_elm_lang$core$Basics$pi / 2))
+			};
+		};
+		return _timjs$elm_collage$Collage$polygon(
+			A2(
+				_elm_lang$core$List$map,
+				f,
+				A2(_elm_lang$core$List$range, 0, n)));
+	});
+var _timjs$elm_collage$Collage$triangle = function (b) {
+	var x = b / 2;
+	var y = (_elm_lang$core$Basics$sqrt(3) / 2) * x;
+	return _timjs$elm_collage$Collage$polygon(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 0 - x, _1: 0 - y},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: x, _1: 0 - y},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 0, _1: y},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _timjs$elm_collage$Collage$opacity = F2(
+	function (a, collage) {
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{opacity: a});
+	});
+var _timjs$elm_collage$Collage$rotate = F2(
+	function (t, collage) {
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{rotation: collage.rotation + t});
+	});
+var _timjs$elm_collage$Collage$scaleXY = F2(
+	function (_p3, collage) {
+		var _p4 = _p3;
+		var _p5 = collage.scale;
+		var sx0 = _p5._0;
+		var sy0 = _p5._1;
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				scale: {ctor: '_Tuple2', _0: sx0 * _p4._0, _1: sy0 * _p4._1}
+			});
+	});
+var _timjs$elm_collage$Collage$scaleY = F2(
+	function (s, collage) {
+		return A2(
+			_timjs$elm_collage$Collage$scaleXY,
+			{ctor: '_Tuple2', _0: 1, _1: s},
+			collage);
+	});
+var _timjs$elm_collage$Collage$scaleX = F2(
+	function (s, collage) {
+		return A2(
+			_timjs$elm_collage$Collage$scaleXY,
+			{ctor: '_Tuple2', _0: s, _1: 1},
+			collage);
+	});
+var _timjs$elm_collage$Collage$scale = F2(
+	function (s, collage) {
+		return A2(
+			_timjs$elm_collage$Collage$scaleXY,
+			{ctor: '_Tuple2', _0: s, _1: s},
+			collage);
+	});
+var _timjs$elm_collage$Collage$shiftY = F2(
+	function (dy, collage) {
+		var _p6 = collage.shift;
+		var x = _p6._0;
+		var y = _p6._1;
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				shift: {ctor: '_Tuple2', _0: x, _1: y + dy}
+			});
+	});
+var _timjs$elm_collage$Collage$shiftX = F2(
+	function (dx, collage) {
+		var _p7 = collage.shift;
+		var x = _p7._0;
+		var y = _p7._1;
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				shift: {ctor: '_Tuple2', _0: x + dx, _1: y}
+			});
+	});
+var _timjs$elm_collage$Collage$shift = F2(
+	function (_p8, collage) {
+		var _p9 = _p8;
+		var _p10 = collage.shift;
+		var x = _p10._0;
+		var y = _p10._1;
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				shift: {ctor: '_Tuple2', _0: x + _p9._0, _1: y + _p9._1}
+			});
+	});
+var _timjs$elm_collage$Collage$group = function (_p11) {
+	return _timjs$elm_collage$Collage_Core$collage(
+		_timjs$elm_collage$Collage_Core$Group(_p11));
+};
+var _timjs$elm_collage$Collage$opposite = function (_p12) {
+	var _p13 = _p12;
+	return {ctor: '_Tuple2', _0: 0 - _p13._0, _1: 0 - _p13._1};
+};
+var _timjs$elm_collage$Collage$LineStyle = F6(
+	function (a, b, c, d, e, f) {
+		return {fill: a, thickness: b, cap: c, join: d, dashPattern: e, dashPhase: f};
+	});
+var _timjs$elm_collage$Collage$Padded = {ctor: 'Padded'};
+var _timjs$elm_collage$Collage$Round = {ctor: 'Round'};
+var _timjs$elm_collage$Collage$Flat = {ctor: 'Flat'};
+var _timjs$elm_collage$Collage$Clipped = {ctor: 'Clipped'};
+var _timjs$elm_collage$Collage$Sharp = {ctor: 'Sharp'};
+var _timjs$elm_collage$Collage$defaultLineStyle = {
+	fill: _timjs$elm_collage$Collage$uniform(_elm_lang$core$Color$black),
+	thickness: _timjs$elm_collage$Collage$thin,
+	cap: _timjs$elm_collage$Collage$Flat,
+	join: _timjs$elm_collage$Collage$Sharp,
+	dashPattern: {ctor: '[]'},
+	dashPhase: 0
+};
+var _timjs$elm_collage$Collage$broken = F3(
+	function (dash, thickness, fill) {
+		return _elm_lang$core$Native_Utils.update(
+			_timjs$elm_collage$Collage$defaultLineStyle,
+			{fill: fill, thickness: thickness, dashPattern: dash});
+	});
+var _timjs$elm_collage$Collage$solid = _timjs$elm_collage$Collage$broken(
+	{ctor: '[]'});
+var _timjs$elm_collage$Collage$invisible = A2(_timjs$elm_collage$Collage$solid, 0, _timjs$elm_collage$Collage$transparent);
+var _timjs$elm_collage$Collage$filled = function (fill) {
+	return _timjs$elm_collage$Collage$styled(
+		{ctor: '_Tuple2', _0: fill, _1: _timjs$elm_collage$Collage$invisible});
+};
+var _timjs$elm_collage$Collage$dot = function (thickness) {
+	var d = _elm_lang$core$Basics$round(thickness);
+	return A2(
+		_timjs$elm_collage$Collage$broken,
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: d, _1: d},
+			_1: {ctor: '[]'}
+		},
+		thickness);
+};
+var _timjs$elm_collage$Collage$dash = function (thickness) {
+	var d = _elm_lang$core$Basics$round(thickness);
+	return A2(
+		_timjs$elm_collage$Collage$broken,
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: d * 5, _1: d * 2},
+			_1: {ctor: '[]'}
+		},
+		thickness);
+};
+var _timjs$elm_collage$Collage$longdash = function (thickness) {
+	var d = _elm_lang$core$Basics$round(thickness);
+	return A2(
+		_timjs$elm_collage$Collage$broken,
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: d * 12, _1: d * 6},
+			_1: {ctor: '[]'}
+		},
+		thickness);
+};
+var _timjs$elm_collage$Collage$dashdot = function (thickness) {
+	var d = _elm_lang$core$Basics$round(thickness);
+	return A2(
+		_timjs$elm_collage$Collage$broken,
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: d * 5, _1: d},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: d, _1: d},
+				_1: {ctor: '[]'}
+			}
+		},
+		thickness);
+};
+var _timjs$elm_collage$Collage$Smooth = {ctor: 'Smooth'};

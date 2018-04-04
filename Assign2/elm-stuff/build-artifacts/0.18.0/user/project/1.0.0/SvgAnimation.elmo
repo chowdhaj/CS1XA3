@@ -1,0 +1,88 @@
+var _user$project$SvgAnimation$view = function (model) {
+	var posY = _elm_lang$core$Basics$toString(model.position.y);
+	var posX = _elm_lang$core$Basics$toString(model.position.x);
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$width('600'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$height('600'),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$circle,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$cx(posX),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$cy(posY),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$r('50'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('blue'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$SvgAnimation$update = F2(
+	function (_p0, model) {
+		var _p1 = _p0;
+		var _p4 = _p1._0;
+		var posY = function () {
+			var _p2 = _p4;
+			switch (_p2) {
+				case 87:
+					return model.position.x + 10;
+				case 83:
+					return model.position.x - 10;
+				default:
+					return 300;
+			}
+		}();
+		var posX = function () {
+			var _p3 = _p4;
+			switch (_p3) {
+				case 68:
+					return model.position.y + 10;
+				case 65:
+					return model.position.y - 10;
+				default:
+					return 300;
+			}
+		}();
+		var modelN = {
+			position: {x: posX, y: posY}
+		};
+		return {ctor: '_Tuple2', _0: modelN, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$SvgAnimation$init = {
+	ctor: '_Tuple2',
+	_0: {
+		position: {x: 300, y: 300}
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$SvgAnimation$Model = function (a) {
+	return {position: a};
+};
+var _user$project$SvgAnimation$KeyMsg = function (a) {
+	return {ctor: 'KeyMsg', _0: a};
+};
+var _user$project$SvgAnimation$subscriptions = function (model) {
+	return _elm_lang$keyboard$Keyboard$downs(_user$project$SvgAnimation$KeyMsg);
+};
+var _user$project$SvgAnimation$main = _elm_lang$html$Html$program(
+	{init: _user$project$SvgAnimation$init, view: _user$project$SvgAnimation$view, update: _user$project$SvgAnimation$update, subscriptions: _user$project$SvgAnimation$subscriptions})();

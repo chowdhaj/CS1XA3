@@ -1,0 +1,540 @@
+var _timjs$elm_collage$Collage_Layout$names = function () {
+	var recurse = F2(
+		function (collage, res) {
+			var _p0 = collage.name;
+			if (_p0.ctor === 'Just') {
+				return A3(_elm_lang$core$Dict$insert, _p0._0, collage, res);
+			} else {
+				return res;
+			}
+		});
+	return A2(_timjs$elm_collage$Collage_Core$foldr, recurse, _elm_lang$core$Dict$empty);
+}();
+var _timjs$elm_collage$Collage_Layout$locate_ = F3(
+	function (string, anchor, $this) {
+		var visited = A2(_elm_lang$core$Debug$log, 'Elm Collage: visited', string);
+		var recurse = function (queue) {
+			recurse:
+			while (true) {
+				var _p1 = queue;
+				if (_p1.ctor === '[]') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					var _p4 = _p1._1;
+					var _p3 = _p1._0;
+					var update = _elm_lang$core$List$map(
+						_timjs$elm_collage$Collage_Core$combine(_p3));
+					var match = A2(
+						_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+						A2(
+							_elm_lang$core$Maybe$map,
+							F2(
+								function (x, y) {
+									return _elm_lang$core$Native_Utils.eq(x, y);
+								})(string),
+							_p3.name),
+						false);
+					if (match) {
+						return _elm_lang$core$Maybe$Just(
+							anchor(_p3));
+					} else {
+						var _p2 = _p3.basic;
+						switch (_p2.ctor) {
+							case 'Group':
+								var _v3 = A2(
+									_elm_lang$core$Basics_ops['++'],
+									_p4,
+									update(_p2._0));
+								queue = _v3;
+								continue recurse;
+							case 'Subcollage':
+								var _v4 = A2(
+									_elm_lang$core$Basics_ops['++'],
+									_p4,
+									update(
+										{
+											ctor: '::',
+											_0: _p2._0,
+											_1: {
+												ctor: '::',
+												_0: _p2._1,
+												_1: {ctor: '[]'}
+											}
+										}));
+								queue = _v4;
+								continue recurse;
+							default:
+								var _v5 = _p4;
+								queue = _v5;
+								continue recurse;
+						}
+					}
+				}
+			}
+		};
+		return recurse(
+			{
+				ctor: '::',
+				_0: $this,
+				_1: {ctor: '[]'}
+			});
+	});
+var _timjs$elm_collage$Collage_Layout$locate = F3(
+	function (string, anchor, $this) {
+		var recurse = function (collage) {
+			var firstOf = A2(
+				_timjs$elm_collage$Helpers$foldrLazy,
+				function (_p5) {
+					return _elm_community$maybe_extra$Maybe_Extra$orLazy(
+						recurse(_p5));
+				},
+				_elm_lang$core$Maybe$Nothing);
+			var match = A2(
+				_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+				A2(
+					_elm_lang$core$Maybe$map,
+					F2(
+						function (x, y) {
+							return _elm_lang$core$Native_Utils.eq(x, y);
+						})(string),
+					collage.name),
+				false);
+			return match ? _elm_lang$core$Maybe$Just(
+				anchor(collage)) : A2(
+				_elm_lang$core$Maybe$map,
+				_timjs$elm_collage$Collage_Core$apply(collage),
+				function () {
+					var _p6 = collage.basic;
+					switch (_p6.ctor) {
+						case 'Group':
+							return firstOf(_p6._0);
+						case 'Subcollage':
+							return firstOf(
+								{
+									ctor: '::',
+									_0: _p6._0,
+									_1: {
+										ctor: '::',
+										_0: _p6._1,
+										_1: {ctor: '[]'}
+									}
+								});
+						default:
+							return _elm_lang$core$Maybe$Nothing;
+					}
+				}());
+		};
+		var _p7 = recurse($this);
+		if (_p7.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$core$Debug$log,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Elm Collage: could not find \'',
+					A2(_elm_lang$core$Basics_ops['++'], string, '\'')),
+				_elm_lang$core$Maybe$Nothing);
+		} else {
+			return _p7;
+		}
+	});
+var _timjs$elm_collage$Collage_Layout$name = F2(
+	function (string, collage) {
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				name: _elm_lang$core$Maybe$Just(string)
+			});
+	});
+var _timjs$elm_collage$Collage_Layout$align = F2(
+	function (anchor, collage) {
+		return A2(
+			_timjs$elm_collage$Collage$shift,
+			_timjs$elm_collage$Collage$opposite(
+				anchor(collage)),
+			collage);
+	});
+var _timjs$elm_collage$Collage_Layout$impose = F2(
+	function (front, back) {
+		return _timjs$elm_collage$Collage_Core$collage(
+			A2(_timjs$elm_collage$Collage_Core$Subcollage, front, back));
+	});
+var _timjs$elm_collage$Collage_Layout$connect = F3(
+	function (locations, line, collage) {
+		var positions = _elm_community$maybe_extra$Maybe_Extra$values(
+			A2(
+				_elm_lang$core$List$map,
+				function (_p8) {
+					var _p9 = _p8;
+					return A3(_timjs$elm_collage$Collage_Layout$locate, _p9._0, _p9._1, collage);
+				},
+				locations));
+		return A2(
+			_timjs$elm_collage$Collage_Layout$impose,
+			A2(
+				_timjs$elm_collage$Collage$traced,
+				line,
+				_timjs$elm_collage$Collage$path(positions)),
+			collage);
+	});
+var _timjs$elm_collage$Collage_Layout$showOrigin = function (collage) {
+	var origin = A2(
+		_timjs$elm_collage$Collage_Layout$name,
+		'_origin_',
+		A2(
+			_timjs$elm_collage$Collage$filled,
+			_timjs$elm_collage$Collage$uniform(_elm_lang$core$Color$red),
+			_timjs$elm_collage$Collage$circle(3)));
+	return A2(_timjs$elm_collage$Collage_Layout$impose, origin, collage);
+};
+var _timjs$elm_collage$Collage_Layout$stack = _timjs$elm_collage$Collage$group;
+var _timjs$elm_collage$Collage_Layout$at = F3(
+	function (anchor, fore, back) {
+		return _timjs$elm_collage$Collage_Layout$stack(
+			{
+				ctor: '::',
+				_0: A2(
+					_timjs$elm_collage$Collage$shift,
+					anchor(back),
+					fore),
+				_1: {
+					ctor: '::',
+					_0: back,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _timjs$elm_collage$Collage_Layout$spacer = F2(
+	function (w, h) {
+		return A2(
+			_timjs$elm_collage$Collage$styled,
+			{ctor: '_Tuple2', _0: _timjs$elm_collage$Collage$transparent, _1: _timjs$elm_collage$Collage$invisible},
+			A2(_timjs$elm_collage$Collage$rectangle, w, h));
+	});
+var _timjs$elm_collage$Collage_Layout$empty = A2(_timjs$elm_collage$Collage_Layout$spacer, 0, 0);
+var _timjs$elm_collage$Collage_Layout$handlePoints = function (thickness) {
+	var thicken = function (_p10) {
+		var _p11 = _p10;
+		var _p13 = _p11._1;
+		var _p12 = _p11._0;
+		var t = thickness / 2;
+		return {
+			ctor: '_Tuple2',
+			_0: (_elm_lang$core$Native_Utils.cmp(_p12, 0) < 0) ? (_p12 - t) : (_p12 + t),
+			_1: (_elm_lang$core$Native_Utils.cmp(_p13, 0) < 0) ? (_p13 - t) : (_p13 + t)
+		};
+	};
+	return _elm_lang$core$List$map(thicken);
+};
+var _timjs$elm_collage$Collage_Layout$handleBox = F2(
+	function (thickness, _p14) {
+		var _p15 = _p14;
+		var y = _p15._1 / 2;
+		var x = _p15._0 / 2;
+		return A2(
+			_timjs$elm_collage$Collage_Layout$handlePoints,
+			thickness,
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 0 - x, _1: 0 - y},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: x, _1: 0 - y},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: x, _1: y},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 0 - x, _1: y},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _timjs$elm_collage$Collage_Layout$unpack = function (_p16) {
+	var _p17 = _p16;
+	var _p21 = _p17.up;
+	var _p20 = _p17.right;
+	var _p19 = _p17.left;
+	var _p18 = _p17.down;
+	return {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 0 - _p19, _1: 0 - _p18},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _p20, _1: 0 - _p18},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: _p20, _1: _p21},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 0 - _p19, _1: _p21},
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+};
+var _timjs$elm_collage$Collage_Layout$handleBasic = function (basic) {
+	handleBasic:
+	while (true) {
+		var _p22 = basic;
+		switch (_p22.ctor) {
+			case 'Shape':
+				switch (_p22._1.ctor) {
+					case 'Circle':
+						var d = 2 * _p22._1._0;
+						return A2(
+							_timjs$elm_collage$Collage_Layout$handleBox,
+							_p22._0._1.thickness,
+							{ctor: '_Tuple2', _0: d, _1: d});
+					case 'Ellipse':
+						return A2(
+							_timjs$elm_collage$Collage_Layout$handleBox,
+							_p22._0._1.thickness,
+							{ctor: '_Tuple2', _0: 2 * _p22._1._0, _1: 2 * _p22._1._1});
+					case 'Rectangle':
+						return A2(
+							_timjs$elm_collage$Collage_Layout$handleBox,
+							_p22._0._1.thickness,
+							{ctor: '_Tuple2', _0: _p22._1._0, _1: _p22._1._1});
+					case 'Polygon':
+						return A2(_timjs$elm_collage$Collage_Layout$handlePoints, _p22._0._1.thickness, _p22._1._0);
+					default:
+						var _v13 = A2(_timjs$elm_collage$Collage_Core$Path, _p22._0._1, _p22._1._0);
+						basic = _v13;
+						continue handleBasic;
+				}
+			case 'Path':
+				return A2(
+					_timjs$elm_collage$Collage_Layout$handlePoints,
+					_elm_lang$core$Native_Utils.eq(_p22._0.cap, _timjs$elm_collage$Collage$Flat) ? 0 : _p22._0.thickness,
+					_p22._1._0);
+			case 'Text':
+				return A2(_timjs$elm_collage$Collage_Layout$handleBox, 0, _p22._0);
+			case 'Image':
+				return A2(_timjs$elm_collage$Collage_Layout$handleBox, 0, _p22._0);
+			case 'Html':
+				return A2(_timjs$elm_collage$Collage_Layout$handleBox, 0, _p22._0);
+			case 'Group':
+				return A2(
+					_timjs$elm_collage$Collage_Layout$handlePoints,
+					0,
+					_elm_lang$core$List$concat(
+						A2(
+							_elm_lang$core$List$map,
+							function (_p23) {
+								return _timjs$elm_collage$Collage_Layout$unpack(
+									_timjs$elm_collage$Collage_Layout$distances(_p23));
+							},
+							_p22._0)));
+			default:
+				return A2(
+					_timjs$elm_collage$Collage_Layout$handlePoints,
+					0,
+					_timjs$elm_collage$Collage_Layout$unpack(
+						_timjs$elm_collage$Collage_Layout$distances(_p22._1)));
+		}
+	}
+};
+var _timjs$elm_collage$Collage_Layout$distances = function (collage) {
+	var points = _timjs$elm_collage$Collage_Layout$handleBasic(collage.basic);
+	var _p24 = _elm_lang$core$List$unzip(
+		A2(
+			_elm_lang$core$List$map,
+			_timjs$elm_collage$Collage_Core$apply(collage),
+			points));
+	var xs = _p24._0;
+	var ys = _p24._1;
+	return {
+		up: A2(
+			_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+			_elm_lang$core$List$maximum(ys),
+			0),
+		down: 0 - A2(
+			_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+			_elm_lang$core$List$minimum(ys),
+			0),
+		right: A2(
+			_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+			_elm_lang$core$List$maximum(xs),
+			0),
+		left: 0 - A2(
+			_elm_community$maybe_extra$Maybe_Extra_ops['?'],
+			_elm_lang$core$List$minimum(xs),
+			0)
+	};
+};
+var _timjs$elm_collage$Collage_Layout$width = function (collage) {
+	var _p25 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var left = _p25.left;
+	var right = _p25.right;
+	return left + right;
+};
+var _timjs$elm_collage$Collage_Layout$height = function (collage) {
+	var _p26 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var up = _p26.up;
+	var down = _p26.down;
+	return up + down;
+};
+var _timjs$elm_collage$Collage_Layout$top = function (collage) {
+	var _p27 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var up = _p27.up;
+	return {ctor: '_Tuple2', _0: 0, _1: up};
+};
+var _timjs$elm_collage$Collage_Layout$topRight = function (collage) {
+	var _p28 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var right = _p28.right;
+	var up = _p28.up;
+	return {ctor: '_Tuple2', _0: right, _1: up};
+};
+var _timjs$elm_collage$Collage_Layout$right = function (collage) {
+	var _p29 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var right = _p29.right;
+	return {ctor: '_Tuple2', _0: right, _1: 0};
+};
+var _timjs$elm_collage$Collage_Layout$bottomRight = function (collage) {
+	var _p30 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var right = _p30.right;
+	var down = _p30.down;
+	return {ctor: '_Tuple2', _0: right, _1: 0 - down};
+};
+var _timjs$elm_collage$Collage_Layout$bottom = function (collage) {
+	var _p31 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var down = _p31.down;
+	return {ctor: '_Tuple2', _0: 0, _1: 0 - down};
+};
+var _timjs$elm_collage$Collage_Layout$bottomLeft = function (collage) {
+	var _p32 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var left = _p32.left;
+	var down = _p32.down;
+	return {ctor: '_Tuple2', _0: 0 - left, _1: 0 - down};
+};
+var _timjs$elm_collage$Collage_Layout$left = function (collage) {
+	var _p33 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var left = _p33.left;
+	return {ctor: '_Tuple2', _0: 0 - left, _1: 0};
+};
+var _timjs$elm_collage$Collage_Layout$topLeft = function (collage) {
+	var _p34 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var left = _p34.left;
+	var up = _p34.up;
+	return {ctor: '_Tuple2', _0: 0 - left, _1: up};
+};
+var _timjs$elm_collage$Collage_Layout$base = function (collage) {
+	var _p35 = _timjs$elm_collage$Collage_Layout$distances(collage);
+	var up = _p35.up;
+	var down = _p35.down;
+	var left = _p35.left;
+	var right = _p35.right;
+	var tx = (right - left) / 2;
+	var ty = (up - down) / 2;
+	return {ctor: '_Tuple2', _0: tx, _1: ty};
+};
+var _timjs$elm_collage$Collage_Layout$center = _timjs$elm_collage$Collage_Layout$align(_timjs$elm_collage$Collage_Layout$base);
+var _timjs$elm_collage$Collage_Layout$showEnvelope = function (collage) {
+	var outline = A2(
+		_timjs$elm_collage$Collage_Layout$name,
+		'_envelope_',
+		A2(
+			_timjs$elm_collage$Collage$shift,
+			_timjs$elm_collage$Collage_Layout$base(collage),
+			A2(
+				_timjs$elm_collage$Collage$outlined,
+				A2(
+					_timjs$elm_collage$Collage$dot,
+					2,
+					_timjs$elm_collage$Collage$uniform(_elm_lang$core$Color$red)),
+				A2(
+					_timjs$elm_collage$Collage$rectangle,
+					_timjs$elm_collage$Collage_Layout$width(collage),
+					_timjs$elm_collage$Collage_Layout$height(collage)))));
+	return A2(_timjs$elm_collage$Collage_Layout$impose, outline, collage);
+};
+var _timjs$elm_collage$Collage_Layout$debug = function (_p36) {
+	return _timjs$elm_collage$Collage_Layout$showOrigin(
+		_timjs$elm_collage$Collage_Layout$showEnvelope(_p36));
+};
+var _timjs$elm_collage$Collage_Layout$envelope = F2(
+	function (dir, collage) {
+		var _p37 = _timjs$elm_collage$Collage_Layout$distances(collage);
+		var up = _p37.up;
+		var down = _p37.down;
+		var left = _p37.left;
+		var right = _p37.right;
+		var _p38 = dir;
+		switch (_p38.ctor) {
+			case 'Up':
+				return up;
+			case 'Down':
+				return down;
+			case 'Right':
+				return right;
+			default:
+				return left;
+		}
+	});
+var _timjs$elm_collage$Collage_Layout$Distances = F4(
+	function (a, b, c, d) {
+		return {up: a, down: b, right: c, left: d};
+	});
+var _timjs$elm_collage$Collage_Layout$Left = {ctor: 'Left'};
+var _timjs$elm_collage$Collage_Layout$Right = {ctor: 'Right'};
+var _timjs$elm_collage$Collage_Layout$Down = {ctor: 'Down'};
+var _timjs$elm_collage$Collage_Layout$Up = {ctor: 'Up'};
+var _timjs$elm_collage$Collage_Layout$facing = function (dir) {
+	var _p39 = dir;
+	switch (_p39.ctor) {
+		case 'Up':
+			return _timjs$elm_collage$Collage_Layout$Down;
+		case 'Down':
+			return _timjs$elm_collage$Collage_Layout$Up;
+		case 'Right':
+			return _timjs$elm_collage$Collage_Layout$Left;
+		default:
+			return _timjs$elm_collage$Collage_Layout$Right;
+	}
+};
+var _timjs$elm_collage$Collage_Layout$opposite = _timjs$elm_collage$Collage_Layout$facing;
+var _timjs$elm_collage$Collage_Layout$place = F3(
+	function (dir, a, b) {
+		var len = A2(_timjs$elm_collage$Collage_Layout$envelope, dir, a) + A2(
+			_timjs$elm_collage$Collage_Layout$envelope,
+			_timjs$elm_collage$Collage_Layout$facing(dir),
+			b);
+		var move = function () {
+			var _p40 = dir;
+			switch (_p40.ctor) {
+				case 'Up':
+					return {ctor: '_Tuple2', _0: 0, _1: len};
+				case 'Down':
+					return {ctor: '_Tuple2', _0: 0, _1: 0 - len};
+				case 'Right':
+					return {ctor: '_Tuple2', _0: len, _1: 0};
+				default:
+					return {ctor: '_Tuple2', _0: 0 - len, _1: 0};
+			}
+		}();
+		return A2(_timjs$elm_collage$Collage$shift, move, b);
+	});
+var _timjs$elm_collage$Collage_Layout$beside = F3(
+	function (dir, a, b) {
+		return _timjs$elm_collage$Collage_Layout$stack(
+			{
+				ctor: '::',
+				_0: a,
+				_1: {
+					ctor: '::',
+					_0: A3(_timjs$elm_collage$Collage_Layout$place, dir, a, b),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _timjs$elm_collage$Collage_Layout$horizontal = A2(
+	_elm_lang$core$List$foldr,
+	_timjs$elm_collage$Collage_Layout$beside(_timjs$elm_collage$Collage_Layout$Right),
+	_timjs$elm_collage$Collage_Layout$empty);
+var _timjs$elm_collage$Collage_Layout$vertical = A2(
+	_elm_lang$core$List$foldr,
+	_timjs$elm_collage$Collage_Layout$beside(_timjs$elm_collage$Collage_Layout$Down),
+	_timjs$elm_collage$Collage_Layout$empty);

@@ -1,0 +1,342 @@
+var _timjs$elm_collage$Collage_Core$search = F2(
+	function (pred, collage) {
+		var recurse = function (queue) {
+			recurse:
+			while (true) {
+				var _p0 = queue;
+				if (_p0.ctor === '[]') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					var _p3 = _p0._1;
+					var _p2 = _p0._0;
+					if (pred(_p2)) {
+						return _elm_lang$core$Maybe$Just(_p2);
+					} else {
+						var _p1 = _p2.basic;
+						switch (_p1.ctor) {
+							case 'Group':
+								var _v2 = A2(_elm_lang$core$Basics_ops['++'], _p3, _p1._0);
+								queue = _v2;
+								continue recurse;
+							case 'Subcollage':
+								var _v3 = A2(
+									_elm_lang$core$Basics_ops['++'],
+									_p3,
+									{
+										ctor: '::',
+										_0: _p1._0,
+										_1: {
+											ctor: '::',
+											_0: _p1._1,
+											_1: {ctor: '[]'}
+										}
+									});
+								queue = _v3;
+								continue recurse;
+							default:
+								var _v4 = _p3;
+								queue = _v4;
+								continue recurse;
+						}
+					}
+				}
+			}
+		};
+		return recurse(
+			{
+				ctor: '::',
+				_0: collage,
+				_1: {ctor: '[]'}
+			});
+	});
+var _timjs$elm_collage$Collage_Core$levels = function (collage) {
+	var recurse = F2(
+		function (result, queue) {
+			recurse:
+			while (true) {
+				var _p4 = queue;
+				if (_p4.ctor === '[]') {
+					return _elm_lang$core$List$reverse(result);
+				} else {
+					var _p7 = _p4._1;
+					var _p6 = _p4._0;
+					var _p5 = _p6.basic;
+					switch (_p5.ctor) {
+						case 'Group':
+							var _v7 = result,
+								_v8 = A2(_elm_lang$core$Basics_ops['++'], _p7, _p5._0);
+							result = _v7;
+							queue = _v8;
+							continue recurse;
+						case 'Subcollage':
+							var _v9 = result,
+								_v10 = A2(
+								_elm_lang$core$Basics_ops['++'],
+								_p7,
+								{
+									ctor: '::',
+									_0: _p5._0,
+									_1: {
+										ctor: '::',
+										_0: _p5._1,
+										_1: {ctor: '[]'}
+									}
+								});
+							result = _v9;
+							queue = _v10;
+							continue recurse;
+						default:
+							var _v11 = {ctor: '::', _0: _p6, _1: result},
+								_v12 = _p7;
+							result = _v11;
+							queue = _v12;
+							continue recurse;
+					}
+				}
+			}
+		});
+	return A2(
+		recurse,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: collage,
+			_1: {ctor: '[]'}
+		});
+};
+var _timjs$elm_collage$Collage_Core$foldl = F3(
+	function (f, acc, collage) {
+		var foldlOf = function (acc) {
+			return A2(
+				_elm_lang$core$List$foldl,
+				F2(
+					function (collage, acc) {
+						return A3(_timjs$elm_collage$Collage_Core$foldl, f, acc, collage);
+					}),
+				acc);
+		};
+		var recurse = function (acc) {
+			var _p8 = collage.basic;
+			switch (_p8.ctor) {
+				case 'Group':
+					return A2(foldlOf, acc, _p8._0);
+				case 'Subcollage':
+					return A2(
+						foldlOf,
+						acc,
+						{
+							ctor: '::',
+							_0: _p8._0,
+							_1: {
+								ctor: '::',
+								_0: _p8._1,
+								_1: {ctor: '[]'}
+							}
+						});
+				default:
+					return acc;
+			}
+		};
+		return recurse(
+			A2(f, collage, acc));
+	});
+var _timjs$elm_collage$Collage_Core$foldrLazy = F3(
+	function (f, acc, collage) {
+		var foldrOf = A2(
+			_timjs$elm_collage$Helpers$foldrLazy,
+			F2(
+				function (collage, acc) {
+					return A3(
+						_timjs$elm_collage$Collage_Core$foldrLazy,
+						f,
+						acc(
+							{ctor: '_Tuple0'}),
+						collage);
+				}),
+			acc);
+		var recurse = function (_p9) {
+			var _p10 = _p9;
+			var _p11 = collage.basic;
+			switch (_p11.ctor) {
+				case 'Group':
+					return foldrOf(_p11._0);
+				case 'Subcollage':
+					return foldrOf(
+						{
+							ctor: '::',
+							_0: _p11._0,
+							_1: {
+								ctor: '::',
+								_0: _p11._1,
+								_1: {ctor: '[]'}
+							}
+						});
+				default:
+					return acc;
+			}
+		};
+		return A2(f, collage, recurse);
+	});
+var _timjs$elm_collage$Collage_Core$find = function (p) {
+	var f = function (x) {
+		return p(x) ? _elm_lang$core$Maybe$Just(x) : _elm_lang$core$Maybe$Nothing;
+	};
+	return A2(
+		_timjs$elm_collage$Collage_Core$foldrLazy,
+		function (_p12) {
+			return _elm_community$maybe_extra$Maybe_Extra$orLazy(
+				f(_p12));
+		},
+		_elm_lang$core$Maybe$Nothing);
+};
+var _timjs$elm_collage$Collage_Core$foldr = F3(
+	function (f, acc, collage) {
+		var foldrOf = A2(
+			_elm_lang$core$List$foldr,
+			F2(
+				function (collage, acc) {
+					return A3(_timjs$elm_collage$Collage_Core$foldr, f, acc, collage);
+				}),
+			acc);
+		var recurse = function () {
+			var _p13 = collage.basic;
+			switch (_p13.ctor) {
+				case 'Group':
+					return foldrOf(_p13._0);
+				case 'Subcollage':
+					return foldrOf(
+						{
+							ctor: '::',
+							_0: _p13._0,
+							_1: {
+								ctor: '::',
+								_0: _p13._1,
+								_1: {ctor: '[]'}
+							}
+						});
+				default:
+					return acc;
+			}
+		}();
+		return A2(f, collage, recurse);
+	});
+var _timjs$elm_collage$Collage_Core$combine = F2(
+	function (_p14, $this) {
+		var _p15 = _p14;
+		var _p16 = $this.shift;
+		var sx = _p16._0;
+		var sy = _p16._1;
+		var _p17 = $this.shift;
+		var x = _p17._0;
+		var y = _p17._1;
+		var _p18 = _p15.scale;
+		var fx = _p18._0;
+		var fy = _p18._1;
+		var _p19 = _p15.shift;
+		var dx = _p19._0;
+		var dy = _p19._1;
+		return _elm_lang$core$Native_Utils.update(
+			$this,
+			{
+				shift: {ctor: '_Tuple2', _0: x + dx, _1: y + dy},
+				scale: {ctor: '_Tuple2', _0: sx * fx, _1: sy * fy},
+				rotation: $this.rotation + _p15.rotation
+			});
+	});
+var _timjs$elm_collage$Collage_Core$apply = function (_p20) {
+	var _p21 = _p20;
+	var _p33 = _p21.rotation;
+	var rotated = function (_p22) {
+		var _p23 = _p22;
+		var _p25 = _p23._1;
+		var _p24 = _p23._0;
+		var s = _elm_lang$core$Basics$sin(_p33);
+		var c = _elm_lang$core$Basics$cos(_p33);
+		return {ctor: '_Tuple2', _0: (c * _p24) - (s * _p25), _1: (s * _p24) + (c * _p25)};
+	};
+	var _p26 = _p21.scale;
+	var sx = _p26._0;
+	var sy = _p26._1;
+	var scaled = function (_p27) {
+		var _p28 = _p27;
+		return {ctor: '_Tuple2', _0: sx * _p28._0, _1: sy * _p28._1};
+	};
+	var _p29 = _p21.shift;
+	var dx = _p29._0;
+	var dy = _p29._1;
+	var shifted = function (_p30) {
+		var _p31 = _p30;
+		return {ctor: '_Tuple2', _0: _p31._0 + dx, _1: _p31._1 + dy};
+	};
+	return function (_p32) {
+		return shifted(
+			scaled(
+				rotated(_p32)));
+	};
+};
+var _timjs$elm_collage$Collage_Core$collage = function (basic) {
+	return {
+		shift: {ctor: '_Tuple2', _0: 0, _1: 0},
+		scale: {ctor: '_Tuple2', _0: 1, _1: 1},
+		rotation: 0,
+		opacity: 1,
+		name: _elm_lang$core$Maybe$Nothing,
+		handlers: {ctor: '[]'},
+		basic: basic
+	};
+};
+var _timjs$elm_collage$Collage_Core$Subcollage = F2(
+	function (a, b) {
+		return {ctor: 'Subcollage', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Group = function (a) {
+	return {ctor: 'Group', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Html = F2(
+	function (a, b) {
+		return {ctor: 'Html', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Image = F2(
+	function (a, b) {
+		return {ctor: 'Image', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Text = F2(
+	function (a, b) {
+		return {ctor: 'Text', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Path = F2(
+	function (a, b) {
+		return {ctor: 'Path', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Shape = F2(
+	function (a, b) {
+		return {ctor: 'Shape', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Loop = function (a) {
+	return {ctor: 'Loop', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Circle = function (a) {
+	return {ctor: 'Circle', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Ellipse = F2(
+	function (a, b) {
+		return {ctor: 'Ellipse', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Rectangle = F3(
+	function (a, b, c) {
+		return {ctor: 'Rectangle', _0: a, _1: b, _2: c};
+	});
+var _timjs$elm_collage$Collage_Core$Polygon = function (a) {
+	return {ctor: 'Polygon', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Polyline = function (a) {
+	return {ctor: 'Polyline', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Chunk = F2(
+	function (a, b) {
+		return {ctor: 'Chunk', _0: a, _1: b};
+	});
+var _timjs$elm_collage$Collage_Core$Uniform = function (a) {
+	return {ctor: 'Uniform', _0: a};
+};
+var _timjs$elm_collage$Collage_Core$Transparent = {ctor: 'Transparent'};

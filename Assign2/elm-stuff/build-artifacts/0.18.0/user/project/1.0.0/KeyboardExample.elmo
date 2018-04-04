@@ -1,0 +1,61 @@
+var _user$project$KeyboardExample$view = function (model) {
+	return _elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(model.counter));
+};
+var _user$project$KeyboardExample$update = F2(
+	function (_p0, model) {
+		var _p1 = _p0;
+		var _p2 = _p1._0;
+		switch (_p2) {
+			case 87:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{counter: model.counter + 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 83:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{counter: model.counter - 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 68:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{counter: model.counter + 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 65:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{counter: model.counter - 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$KeyboardExample$init = {
+	ctor: '_Tuple2',
+	_0: {counter: 0},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$KeyboardExample$Model = function (a) {
+	return {counter: a};
+};
+var _user$project$KeyboardExample$KeyMsg = function (a) {
+	return {ctor: 'KeyMsg', _0: a};
+};
+var _user$project$KeyboardExample$subscriptions = function (model) {
+	return _elm_lang$keyboard$Keyboard$downs(_user$project$KeyboardExample$KeyMsg);
+};
+var _user$project$KeyboardExample$main = _elm_lang$html$Html$program(
+	{init: _user$project$KeyboardExample$init, view: _user$project$KeyboardExample$view, update: _user$project$KeyboardExample$update, subscriptions: _user$project$KeyboardExample$subscriptions})();

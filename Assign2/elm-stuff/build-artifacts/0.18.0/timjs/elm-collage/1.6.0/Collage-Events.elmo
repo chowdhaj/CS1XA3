@@ -1,0 +1,48 @@
+var _timjs$elm_collage$Collage_Events$on = F3(
+	function (event, decoder, collage) {
+		return _elm_lang$core$Native_Utils.update(
+			collage,
+			{
+				handlers: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: event, _1: decoder},
+					_1: collage.handlers
+				}
+			});
+	});
+var _timjs$elm_collage$Collage_Events$simpleOn = function (event) {
+	return function (_p0) {
+		return A2(
+			_timjs$elm_collage$Collage_Events$on,
+			event,
+			_elm_lang$core$Json_Decode$succeed(_p0));
+	};
+};
+var _timjs$elm_collage$Collage_Events$onClick = _timjs$elm_collage$Collage_Events$simpleOn('click');
+var _timjs$elm_collage$Collage_Events$onDoubleClick = _timjs$elm_collage$Collage_Events$simpleOn('dblclick');
+var _timjs$elm_collage$Collage_Events$onFocusIn = _timjs$elm_collage$Collage_Events$simpleOn('focusin');
+var _timjs$elm_collage$Collage_Events$onFocusOut = _timjs$elm_collage$Collage_Events$simpleOn('focusout');
+var _timjs$elm_collage$Collage_Events$mouseOn = F2(
+	function (event, msg) {
+		return A2(
+			_timjs$elm_collage$Collage_Events$on,
+			event,
+			A2(
+				_elm_lang$core$Json_Decode$map,
+				msg,
+				A3(
+					_elm_lang$core$Json_Decode$map2,
+					F2(
+						function (x, y) {
+							return {ctor: '_Tuple2', _0: x, _1: y};
+						}),
+					A2(_elm_lang$core$Json_Decode$field, 'clientX', _elm_lang$core$Json_Decode$float),
+					A2(_elm_lang$core$Json_Decode$field, 'clientY', _elm_lang$core$Json_Decode$float))));
+	});
+var _timjs$elm_collage$Collage_Events$onMouseDown = _timjs$elm_collage$Collage_Events$mouseOn('mousedown');
+var _timjs$elm_collage$Collage_Events$onMouseUp = _timjs$elm_collage$Collage_Events$mouseOn('mouseup');
+var _timjs$elm_collage$Collage_Events$onMouseEnter = _timjs$elm_collage$Collage_Events$mouseOn('mouseenter');
+var _timjs$elm_collage$Collage_Events$onMouseLeave = _timjs$elm_collage$Collage_Events$mouseOn('mouseleave');
+var _timjs$elm_collage$Collage_Events$onMouseOver = _timjs$elm_collage$Collage_Events$mouseOn('mouseover');
+var _timjs$elm_collage$Collage_Events$onMouseOut = _timjs$elm_collage$Collage_Events$mouseOn('mouseout');
+var _timjs$elm_collage$Collage_Events$onMouseMove = _timjs$elm_collage$Collage_Events$mouseOn('mousemove');

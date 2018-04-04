@@ -1,0 +1,127 @@
+var _user$project$MouseExample$view = function (model) {
+	var radius = (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		80) < 0) ? '5' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		180) < 0) ? '10' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		300) < 0) ? '15' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		400) < 0) ? '20' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		520) < 0) ? '25' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		640) < 0) ? '30' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		770) < 0) ? '35' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		880) < 0) ? '40' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$second(model.position),
+		1050) < 0) ? '45' : '50'))))))));
+	var color = (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		140) < 0) ? 'red' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		280) < 0) ? 'orange' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		420) < 0) ? 'yellow' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		560) < 0) ? 'lime' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		700) < 0) ? 'green' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		840) < 0) ? 'cyan' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		980) < 0) ? 'blue' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		1120) < 0) ? 'purple' : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Tuple$first(model.position),
+		1260) < 0) ? 'black' : 'grey'))))))));
+	var posY = _elm_lang$core$Basics$toString(
+		_elm_lang$core$Tuple$second(model.position));
+	var posX = _elm_lang$core$Basics$toString(
+		_elm_lang$core$Tuple$first(model.position));
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$svg,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$width('1400'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$height('800'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$circle,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$cx(posX),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$cy(posY),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$r(radius),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill(color),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('More Stuff'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$MouseExample$update = F2(
+	function (_p0, model) {
+		var _p1 = _p0;
+		var _p2 = _p1._0;
+		return {
+			ctor: '_Tuple2',
+			_0: {
+				position: {ctor: '_Tuple2', _0: _p2.x, _1: _p2.y}
+			},
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _user$project$MouseExample$init = {
+	ctor: '_Tuple2',
+	_0: {
+		position: {ctor: '_Tuple2', _0: 700, _1: 400}
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$MouseExample$Model = function (a) {
+	return {position: a};
+};
+var _user$project$MouseExample$MouseMsg = function (a) {
+	return {ctor: 'MouseMsg', _0: a};
+};
+var _user$project$MouseExample$subscriptions = function (model) {
+	return _elm_lang$mouse$Mouse$moves(_user$project$MouseExample$MouseMsg);
+};
+var _user$project$MouseExample$main = _elm_lang$html$Html$program(
+	{init: _user$project$MouseExample$init, view: _user$project$MouseExample$view, update: _user$project$MouseExample$update, subscriptions: _user$project$MouseExample$subscriptions})();

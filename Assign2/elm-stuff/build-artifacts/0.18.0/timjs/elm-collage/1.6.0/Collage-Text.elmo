@@ -1,0 +1,190 @@
+var _timjs$elm_collage$Collage_Text$toCssFontSpec = function (style) {
+	var spec = {
+		ctor: '::',
+		_0: function () {
+			var _p0 = style.shape;
+			switch (_p0.ctor) {
+				case 'Upright':
+					return 'normal';
+				case 'SmallCaps':
+					return 'normal';
+				case 'Slanted':
+					return 'oblique';
+				default:
+					return 'italic';
+			}
+		}(),
+		_1: {
+			ctor: '::',
+			_0: function () {
+				var _p1 = style.shape;
+				if (_p1.ctor === 'SmallCaps') {
+					return 'small-caps';
+				} else {
+					return 'normal';
+				}
+			}(),
+			_1: {
+				ctor: '::',
+				_0: function () {
+					var _p2 = style.weight;
+					switch (_p2.ctor) {
+						case 'Thin':
+							return '200';
+						case 'Light':
+							return '300';
+						case 'Regular':
+							return 'normal';
+						case 'Medium':
+							return '500';
+						case 'SemiBold':
+							return '600';
+						case 'Bold':
+							return 'bold';
+						default:
+							return '800';
+					}
+				}(),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(style.size),
+						'px'),
+					_1: {
+						ctor: '::',
+						_0: function () {
+							var _p3 = style.typeface;
+							switch (_p3.ctor) {
+								case 'Serif':
+									return 'serif';
+								case 'Sansserif':
+									return 'sans-serif';
+								case 'Monospace':
+									return 'monospace';
+								default:
+									return _p3._0;
+							}
+						}(),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	};
+	return _elm_lang$core$String$concat(
+		A2(_elm_lang$core$List$intersperse, ' ', spec));
+};
+var _timjs$elm_collage$Collage_Text$height = function (_p4) {
+	var _p5 = _p4;
+	return _elm_lang$core$Basics$toFloat(_p5._0.size);
+};
+var _timjs$elm_collage$Collage_Text$width = function (_p6) {
+	var _p7 = _p6;
+	return A2(
+		_timjs$elm_collage$Native_Text.width,
+		_timjs$elm_collage$Collage_Text$toCssFontSpec(_p7._0),
+		_p7._1);
+};
+var _timjs$elm_collage$Collage_Text$line = F2(
+	function (line, _p8) {
+		var _p9 = _p8;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p9._0,
+				{line: line}),
+			_p9._1);
+	});
+var _timjs$elm_collage$Collage_Text$weight = F2(
+	function (weight, _p10) {
+		var _p11 = _p10;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p11._0,
+				{weight: weight}),
+			_p11._1);
+	});
+var _timjs$elm_collage$Collage_Text$shape = F2(
+	function (shape, _p12) {
+		var _p13 = _p12;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p13._0,
+				{shape: shape}),
+			_p13._1);
+	});
+var _timjs$elm_collage$Collage_Text$enormous = 27;
+var _timjs$elm_collage$Collage_Text$huge = 23;
+var _timjs$elm_collage$Collage_Text$large = 19;
+var _timjs$elm_collage$Collage_Text$normal = 16;
+var _timjs$elm_collage$Collage_Text$small = 13;
+var _timjs$elm_collage$Collage_Text$tiny = 11;
+var _timjs$elm_collage$Collage_Text$size = F2(
+	function (size, _p14) {
+		var _p15 = _p14;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p15._0,
+				{size: size}),
+			_p15._1);
+	});
+var _timjs$elm_collage$Collage_Text$color = F2(
+	function (color, _p16) {
+		var _p17 = _p16;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p17._0,
+				{color: color}),
+			_p17._1);
+	});
+var _timjs$elm_collage$Collage_Text$typeface = F2(
+	function (typeface, _p18) {
+		var _p19 = _p18;
+		return A2(
+			_timjs$elm_collage$Collage_Core$Chunk,
+			_elm_lang$core$Native_Utils.update(
+				_p19._0,
+				{typeface: typeface}),
+			_p19._1);
+	});
+var _timjs$elm_collage$Collage_Text$style = F2(
+	function (style, _p20) {
+		var _p21 = _p20;
+		return A2(_timjs$elm_collage$Collage_Core$Chunk, style, _p21._1);
+	});
+var _timjs$elm_collage$Collage_Text$Style = F6(
+	function (a, b, c, d, e, f) {
+		return {typeface: a, size: b, color: c, shape: d, weight: e, line: f};
+	});
+var _timjs$elm_collage$Collage_Text$Font = function (a) {
+	return {ctor: 'Font', _0: a};
+};
+var _timjs$elm_collage$Collage_Text$Monospace = {ctor: 'Monospace'};
+var _timjs$elm_collage$Collage_Text$Sansserif = {ctor: 'Sansserif'};
+var _timjs$elm_collage$Collage_Text$Serif = {ctor: 'Serif'};
+var _timjs$elm_collage$Collage_Text$Italic = {ctor: 'Italic'};
+var _timjs$elm_collage$Collage_Text$Slanted = {ctor: 'Slanted'};
+var _timjs$elm_collage$Collage_Text$SmallCaps = {ctor: 'SmallCaps'};
+var _timjs$elm_collage$Collage_Text$Upright = {ctor: 'Upright'};
+var _timjs$elm_collage$Collage_Text$Black = {ctor: 'Black'};
+var _timjs$elm_collage$Collage_Text$Bold = {ctor: 'Bold'};
+var _timjs$elm_collage$Collage_Text$SemiBold = {ctor: 'SemiBold'};
+var _timjs$elm_collage$Collage_Text$Medium = {ctor: 'Medium'};
+var _timjs$elm_collage$Collage_Text$Regular = {ctor: 'Regular'};
+var _timjs$elm_collage$Collage_Text$Light = {ctor: 'Light'};
+var _timjs$elm_collage$Collage_Text$Thin = {ctor: 'Thin'};
+var _timjs$elm_collage$Collage_Text$Expanded = {ctor: 'Expanded'};
+var _timjs$elm_collage$Collage_Text$Normal = {ctor: 'Normal'};
+var _timjs$elm_collage$Collage_Text$Condensed = {ctor: 'Condensed'};
+var _timjs$elm_collage$Collage_Text$Through = {ctor: 'Through'};
+var _timjs$elm_collage$Collage_Text$Over = {ctor: 'Over'};
+var _timjs$elm_collage$Collage_Text$Under = {ctor: 'Under'};
+var _timjs$elm_collage$Collage_Text$None = {ctor: 'None'};
+var _timjs$elm_collage$Collage_Text$defaultStyle = {typeface: _timjs$elm_collage$Collage_Text$Sansserif, size: _timjs$elm_collage$Collage_Text$normal, color: _elm_lang$core$Color$black, shape: _timjs$elm_collage$Collage_Text$Upright, weight: _timjs$elm_collage$Collage_Text$Regular, line: _timjs$elm_collage$Collage_Text$None};
+var _timjs$elm_collage$Collage_Text$fromString = _timjs$elm_collage$Collage_Core$Chunk(_timjs$elm_collage$Collage_Text$defaultStyle);
+var _timjs$elm_collage$Collage_Text$empty = _timjs$elm_collage$Collage_Text$fromString('');

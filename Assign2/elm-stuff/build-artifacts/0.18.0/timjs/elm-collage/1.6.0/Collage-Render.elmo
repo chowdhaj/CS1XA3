@@ -1,0 +1,763 @@
+var _timjs$elm_collage$Collage_Render$decodeDashing = function (ds) {
+	var decodeOnOff = function (_p0) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$core$String$join,
+			',',
+			{
+				ctor: '::',
+				_0: _elm_lang$core$Basics$toString(_p1._0),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p1._1),
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	return A2(
+		_elm_lang$core$String$join,
+		' ',
+		A2(_elm_lang$core$List$map, decodeOnOff, ds));
+};
+var _timjs$elm_collage$Collage_Render$decodeOpacity = function (c) {
+	var _p2 = _elm_lang$core$Color$toRgb(c);
+	var alpha = _p2.alpha;
+	return _elm_lang$core$Basics$toString(alpha);
+};
+var _timjs$elm_collage$Collage_Render$decodeColor = function (c) {
+	var _p3 = _elm_lang$core$Color$toRgb(c);
+	var red = _p3.red;
+	var green = _p3.green;
+	var blue = _p3.blue;
+	var r = _elm_lang$core$Basics$toString(red);
+	var g = _elm_lang$core$Basics$toString(green);
+	var b = _elm_lang$core$Basics$toString(blue);
+	return _elm_lang$core$String$concat(
+		{
+			ctor: '::',
+			_0: 'rgb(',
+			_1: {
+				ctor: '::',
+				_0: r,
+				_1: {
+					ctor: '::',
+					_0: ',',
+					_1: {
+						ctor: '::',
+						_0: g,
+						_1: {
+							ctor: '::',
+							_0: ',',
+							_1: {
+								ctor: '::',
+								_0: b,
+								_1: {
+									ctor: '::',
+									_0: ')',
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _timjs$elm_collage$Collage_Render$decodeFillOpacity = function (fs) {
+	var _p4 = fs;
+	if (_p4.ctor === 'Uniform') {
+		return _timjs$elm_collage$Collage_Render$decodeOpacity(_p4._0);
+	} else {
+		return '0';
+	}
+};
+var _timjs$elm_collage$Collage_Render$decodeFill = function (fs) {
+	var _p5 = fs;
+	if (_p5.ctor === 'Uniform') {
+		return _timjs$elm_collage$Collage_Render$decodeColor(_p5._0);
+	} else {
+		return 'none';
+	}
+};
+var _timjs$elm_collage$Collage_Render$decodeTransform = function (collage) {
+	var sy = _elm_lang$core$Basics$toString(
+		_elm_lang$core$Tuple$second(collage.scale));
+	var sx = _elm_lang$core$Basics$toString(
+		_elm_lang$core$Tuple$first(collage.scale));
+	var r = _elm_lang$core$Basics$toString((((0 - collage.rotation) / 2) / _elm_lang$core$Basics$pi) * 360);
+	var dy = _elm_lang$core$Basics$toString(
+		0 - _elm_lang$core$Tuple$second(collage.shift));
+	var dx = _elm_lang$core$Basics$toString(
+		_elm_lang$core$Tuple$first(collage.shift));
+	return _elm_lang$core$String$concat(
+		{
+			ctor: '::',
+			_0: 'translate(',
+			_1: {
+				ctor: '::',
+				_0: dx,
+				_1: {
+					ctor: '::',
+					_0: ',',
+					_1: {
+						ctor: '::',
+						_0: dy,
+						_1: {
+							ctor: '::',
+							_0: ') scale(',
+							_1: {
+								ctor: '::',
+								_0: sx,
+								_1: {
+									ctor: '::',
+									_0: ',',
+									_1: {
+										ctor: '::',
+										_0: sy,
+										_1: {
+											ctor: '::',
+											_0: ') rotate(',
+											_1: {
+												ctor: '::',
+												_0: r,
+												_1: {
+													ctor: '::',
+													_0: ')',
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _timjs$elm_collage$Collage_Render$decodePoints = function (ps) {
+	return A2(
+		_elm_lang$core$String$join,
+		' ',
+		A2(
+			_elm_lang$core$List$map,
+			function (_p6) {
+				var _p7 = _p6;
+				return A2(
+					_elm_lang$core$String$join,
+					',',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p7._0),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(0 - _p7._1),
+							_1: {ctor: '[]'}
+						}
+					});
+			},
+			ps));
+};
+var _timjs$elm_collage$Collage_Render$decodeJoin = function (join) {
+	var _p8 = join;
+	switch (_p8.ctor) {
+		case 'Smooth':
+			return 'round';
+		case 'Sharp':
+			return 'miter';
+		default:
+			return 'bevel';
+	}
+};
+var _timjs$elm_collage$Collage_Render$decodeCap = function (cap) {
+	var _p9 = cap;
+	switch (_p9.ctor) {
+		case 'Round':
+			return 'round';
+		case 'Padded':
+			return 'square';
+		default:
+			return 'butt';
+	}
+};
+var _timjs$elm_collage$Collage_Render$attrs = function (collage) {
+	var _p10 = collage.basic;
+	_v6_3:
+	do {
+		switch (_p10.ctor) {
+			case 'Path':
+				var _p11 = _p10._0;
+				return {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$stroke(
+						_timjs$elm_collage$Collage_Render$decodeFill(_p11.fill)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$strokeOpacity(
+							_timjs$elm_collage$Collage_Render$decodeFillOpacity(_p11.fill)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+								_elm_lang$core$Basics$toString(_p11.thickness)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$strokeLinecap(
+									_timjs$elm_collage$Collage_Render$decodeCap(_p11.cap)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$strokeLinejoin(
+										_timjs$elm_collage$Collage_Render$decodeJoin(_p11.join)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$opacity(
+												_elm_lang$core$Basics$toString(collage.opacity)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$transform(
+													_timjs$elm_collage$Collage_Render$decodeTransform(collage)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$strokeDashoffset(
+														_elm_lang$core$Basics$toString(_p11.dashPhase)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeDasharray(
+															_timjs$elm_collage$Collage_Render$decodeDashing(_p11.dashPattern)),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				};
+			case 'Shape':
+				if (_p10._0.ctor === '_Tuple2') {
+					var _p13 = _p10._0._1;
+					var _p12 = _p10._0._0;
+					return {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$fill(
+							_timjs$elm_collage$Collage_Render$decodeFill(_p12)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fillOpacity(
+								_timjs$elm_collage$Collage_Render$decodeFillOpacity(_p12)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$stroke(
+									_timjs$elm_collage$Collage_Render$decodeFill(_p13.fill)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$strokeOpacity(
+										_timjs$elm_collage$Collage_Render$decodeFillOpacity(_p13.fill)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+											_elm_lang$core$Basics$toString(_p13.thickness)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeLinecap(
+												_timjs$elm_collage$Collage_Render$decodeCap(_p13.cap)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeLinejoin(
+													_timjs$elm_collage$Collage_Render$decodeJoin(_p13.join)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$opacity(
+														_elm_lang$core$Basics$toString(collage.opacity)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$transform(
+															_timjs$elm_collage$Collage_Render$decodeTransform(collage)),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$strokeDashoffset(
+																_elm_lang$core$Basics$toString(_p13.dashPhase)),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$strokeDasharray(
+																	_timjs$elm_collage$Collage_Render$decodeDashing(_p13.dashPattern)),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					};
+				} else {
+					break _v6_3;
+				}
+			case 'Text':
+				var _p19 = _p10._1._0;
+				return {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$fill(
+						_timjs$elm_collage$Collage_Render$decodeFill(
+							_timjs$elm_collage$Collage_Core$Uniform(_p19.color))),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$fontFamily(
+							function () {
+								var _p14 = _p19.typeface;
+								switch (_p14.ctor) {
+									case 'Serif':
+										return 'serif';
+									case 'Sansserif':
+										return 'sans-serif';
+									case 'Monospace':
+										return 'monospace';
+									default:
+										return _p14._0;
+								}
+							}()),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fontSize(
+								_elm_lang$core$Basics$toString(_p19.size)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fontWeight(
+									function () {
+										var _p15 = _p19.weight;
+										switch (_p15.ctor) {
+											case 'Thin':
+												return '200';
+											case 'Light':
+												return '300';
+											case 'Regular':
+												return 'normal';
+											case 'Medium':
+												return '500';
+											case 'SemiBold':
+												return '600';
+											case 'Bold':
+												return 'bold';
+											default:
+												return '800';
+										}
+									}()),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fontStyle(
+										function () {
+											var _p16 = _p19.shape;
+											switch (_p16.ctor) {
+												case 'Upright':
+													return 'normal';
+												case 'SmallCaps':
+													return 'normal';
+												case 'Slanted':
+													return 'oblique';
+												default:
+													return 'italic';
+											}
+										}()),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fontVariant(
+											function () {
+												var _p17 = _p19.shape;
+												if (_p17.ctor === 'SmallCaps') {
+													return 'small-caps';
+												} else {
+													return 'normal';
+												}
+											}()),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$textDecoration(
+												function () {
+													var _p18 = _p19.line;
+													switch (_p18.ctor) {
+														case 'None':
+															return 'none';
+														case 'Under':
+															return 'underline';
+														case 'Over':
+															return 'overline';
+														default:
+															return 'line-through';
+													}
+												}()),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$textAnchor('middle'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$dominantBaseline('middle'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$transform(
+															_timjs$elm_collage$Collage_Render$decodeTransform(collage)),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				};
+			default:
+				break _v6_3;
+		}
+	} while(false);
+	return {
+		ctor: '::',
+		_0: _elm_lang$svg$Svg_Attributes$transform(
+			_timjs$elm_collage$Collage_Render$decodeTransform(collage)),
+		_1: {ctor: '[]'}
+	};
+};
+var _timjs$elm_collage$Collage_Render$events = function (handlers) {
+	return A2(
+		_elm_lang$core$List$map,
+		_elm_lang$core$Basics$uncurry(_elm_lang$svg$Svg_Events$on),
+		handlers);
+};
+var _timjs$elm_collage$Collage_Render$box = F2(
+	function (w, h) {
+		return {
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$width(
+				_elm_lang$core$Basics$toString(w)),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$height(
+					_elm_lang$core$Basics$toString(h)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString((0 - w) / 2)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString((0 - h) / 2)),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
+var _timjs$elm_collage$Collage_Render$render = function (collage) {
+	render:
+	while (true) {
+		var name = A2(_elm_community$maybe_extra$Maybe_Extra_ops['?'], collage.name, '_unnamed_');
+		var _p20 = collage.basic;
+		switch (_p20.ctor) {
+			case 'Path':
+				var _p21 = _p20._1;
+				return A2(
+					_elm_lang$svg$Svg$polyline,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$id(name),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$points(
+									_timjs$elm_collage$Collage_Render$decodePoints(_p21._0)),
+								_1: {ctor: '[]'}
+							}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_timjs$elm_collage$Collage_Render$attrs(collage),
+							_timjs$elm_collage$Collage_Render$events(collage.handlers))),
+					{ctor: '[]'});
+			case 'Shape':
+				var _p22 = _p20._1;
+				switch (_p22.ctor) {
+					case 'Polygon':
+						return A2(
+							_elm_lang$svg$Svg$polygon,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$id(name),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$points(
+											_timjs$elm_collage$Collage_Render$decodePoints(_p22._0)),
+										_1: {ctor: '[]'}
+									}
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_timjs$elm_collage$Collage_Render$attrs(collage),
+									_timjs$elm_collage$Collage_Render$events(collage.handlers))),
+							{ctor: '[]'});
+					case 'Circle':
+						return A2(
+							_elm_lang$svg$Svg$circle,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$id(name),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$r(
+											_elm_lang$core$Basics$toString(_p22._0)),
+										_1: {ctor: '[]'}
+									}
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_timjs$elm_collage$Collage_Render$attrs(collage),
+									_timjs$elm_collage$Collage_Render$events(collage.handlers))),
+							{ctor: '[]'});
+					case 'Ellipse':
+						return A2(
+							_elm_lang$svg$Svg$ellipse,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$id(name),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$rx(
+											_elm_lang$core$Basics$toString(_p22._0)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$ry(
+												_elm_lang$core$Basics$toString(_p22._1)),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_timjs$elm_collage$Collage_Render$attrs(collage),
+									_timjs$elm_collage$Collage_Render$events(collage.handlers))),
+							{ctor: '[]'});
+					case 'Rectangle':
+						var _p23 = _p22._2;
+						return A2(
+							_elm_lang$svg$Svg$rect,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$id(name),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$rx(
+											_elm_lang$core$Basics$toString(_p23)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$ry(
+												_elm_lang$core$Basics$toString(_p23)),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									A2(_timjs$elm_collage$Collage_Render$box, _p22._0, _p22._1),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_timjs$elm_collage$Collage_Render$attrs(collage),
+										_timjs$elm_collage$Collage_Render$events(collage.handlers)))),
+							{ctor: '[]'});
+					default:
+						var _v15 = _elm_lang$core$Native_Utils.update(
+							collage,
+							{
+								basic: A2(_timjs$elm_collage$Collage_Core$Path, _p20._0._1, _p22._0)
+							});
+						collage = _v15;
+						continue render;
+				}
+			case 'Text':
+				return A2(
+					_elm_lang$svg$Svg$text_,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$id(name),
+							_1: {ctor: '[]'}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_timjs$elm_collage$Collage_Render$attrs(collage),
+							_timjs$elm_collage$Collage_Render$events(collage.handlers))),
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg$text(_p20._1._1),
+						_1: {ctor: '[]'}
+					});
+			case 'Image':
+				return A2(
+					_elm_lang$svg$Svg$image,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$id(name),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$xlinkHref(_p20._1),
+								_1: {ctor: '[]'}
+							}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							A2(_timjs$elm_collage$Collage_Render$box, _p20._0._0, _p20._0._1),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_timjs$elm_collage$Collage_Render$attrs(collage),
+								_timjs$elm_collage$Collage_Render$events(collage.handlers)))),
+					{ctor: '[]'});
+			case 'Html':
+				return A2(
+					_elm_lang$svg$Svg$foreignObject,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$id(name),
+							_1: {ctor: '[]'}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							A2(_timjs$elm_collage$Collage_Render$box, _p20._0._0, _p20._0._1),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_timjs$elm_collage$Collage_Render$attrs(collage),
+								_timjs$elm_collage$Collage_Render$events(collage.handlers)))),
+					{
+						ctor: '::',
+						_0: _p20._1,
+						_1: {ctor: '[]'}
+					});
+			case 'Group':
+				return A2(
+					_elm_lang$svg$Svg$g,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$id(name),
+						_1: A2(
+							_elm_lang$core$Basics_ops['++'],
+							_timjs$elm_collage$Collage_Render$attrs(collage),
+							_timjs$elm_collage$Collage_Render$events(collage.handlers))
+					},
+					A3(
+						_elm_lang$core$List$foldl,
+						F2(
+							function (col, res) {
+								return {
+									ctor: '::',
+									_0: _timjs$elm_collage$Collage_Render$render(col),
+									_1: res
+								};
+							}),
+						{ctor: '[]'},
+						_p20._0));
+			default:
+				var _v16 = _elm_lang$core$Native_Utils.update(
+					collage,
+					{
+						basic: _timjs$elm_collage$Collage_Core$Group(
+							{
+								ctor: '::',
+								_0: _p20._0,
+								_1: {
+									ctor: '::',
+									_0: _p20._1,
+									_1: {ctor: '[]'}
+								}
+							})
+					});
+				collage = _v16;
+				continue render;
+		}
+	}
+};
+var _timjs$elm_collage$Collage_Render$svgAbsolute = F2(
+	function (_p24, collage) {
+		var _p25 = _p24;
+		var h = _elm_lang$core$Basics$toString(_p25._1);
+		var w = _elm_lang$core$Basics$toString(_p25._0);
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$svg,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$width(w),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$height(h),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$version('1.1'),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _timjs$elm_collage$Collage_Render$render(collage),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _timjs$elm_collage$Collage_Render$svgExplicit = F2(
+	function (attributes, collage) {
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			attributes,
+			{
+				ctor: '::',
+				_0: _timjs$elm_collage$Collage_Render$render(collage),
+				_1: {ctor: '[]'}
+			});
+	});
+var _timjs$elm_collage$Collage_Render$svg = function (collage) {
+	return A2(
+		_timjs$elm_collage$Collage_Render$svgAbsolute,
+		{
+			ctor: '_Tuple2',
+			_0: _timjs$elm_collage$Collage_Layout$width(collage),
+			_1: _timjs$elm_collage$Collage_Layout$height(collage)
+		},
+		A2(_timjs$elm_collage$Collage_Layout$align, _timjs$elm_collage$Collage_Layout$topLeft, collage));
+};
+var _timjs$elm_collage$Collage_Render$svgBox = F2(
+	function (_p26, collage) {
+		var _p27 = _p26;
+		var _p29 = _p27._0;
+		var _p28 = _p27._1;
+		return A2(
+			_timjs$elm_collage$Collage_Render$svgAbsolute,
+			{ctor: '_Tuple2', _0: _p29, _1: _p28},
+			A2(
+				_timjs$elm_collage$Collage$shift,
+				{ctor: '_Tuple2', _0: _p29 / 2, _1: (0 - _p28) / 2},
+				collage));
+	});
