@@ -15,8 +15,15 @@ This program is a simple math library, made in Haskell, that will assist you wit
   * You can read more about this in Haddock [documentation]
 
 ### How-To 
+###### Honestly, Just Read The Documentation - I'm To Lazy To Finish This
 Coming Soon 
-###### Honestly, Just Read The Documentation
+
+### References
+1. Curtis D'Alves  :: Ideas, Code, & Help
+2. Allen Chen      :: Help With ExprEval.hs
+3. Noa Barsky      :: Help With ExprDiff.hs
+4. Google          :: Resource Haven
+5. Wikipedia       :: Math Help
 
 ### License
 This software is protected under WTFPL. Do whatever you want, but don't come crying to me if you mess up. 
