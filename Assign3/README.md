@@ -14,8 +14,9 @@ This program is a simple math library, made in Haskell, that will assist you wit
 5. Parse strings into an expression datatype
   * You can read more about this in Haddock [documentation]
 
-### How-To
-Coming Soon
+### How-To 
+Coming Soon 
+###### Honestly, Just Read The Documentation
 
 ### License
 This software is protected under WTFPL. Do whatever you want, but don't come crying to me if you mess up. 
