@@ -4,8 +4,10 @@
 This program is a simple math library, made in Haskell, that will assist you with your calculus homework. It can do a variety of things, such as:
 1. Encode the following datatypes:
   * Addition
+  * Subtraction
   * Multiplication
   * Cos, Sin, Log, Exp (natural)
+  * Exponents
   * Variables
   * Constants
 2. Evaluate an expression
