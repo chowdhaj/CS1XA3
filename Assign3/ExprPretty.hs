@@ -21,6 +21,7 @@ parens : Wraps values inside brackets/quotations
 3 = " Double Quotes "
 4 = ' Single Quotes '
 -}
+-- | Adds (different) parenthesis or quotes to the expressions/values
 parens :: (Eq a, Num a) => a -> [Char] -> [Char]
 parens n ss = if n == 0 then "(" ++ ss ++ ")" else
   if n == 1 then "[" ++ ss ++ "]" else
@@ -33,6 +34,7 @@ Instance Show Expr
   Outputs a readable (human-friendly) of our datatype 'Expr'
   Each numeric expression has its own implementation of 'show'
 -}
+-- | Properly formats each 'Expr' data type into a human readable format and prints it to the screen
 instance Show a => Show (Expr a) where
   show (E e)         = " (Natural) e ^ " ++ (parens 0 (show e))
   show (Add e1 e2)   = (parens 0 (show e1)) ++ " !+ " ++ (parens 0 (show e2))

@@ -15,9 +15,9 @@ import Data.List
 
 -- * Section: DataType Declaration
 
--- | A datatype for encoding numeric expressions. Each data is of type 'Expr a', with the exception of Const
+-- | A datatype for encoding numeric expressions. Each data is of type 'Expr a', with the exception of Const. These are the types: 
 data Expr a = E (Expr a)              -- ^ Represents the natural exponent (e)
-	        | Add (Expr a) (Expr a)   -- ^ Represents binary addition by wrapping two 'Expr a' expressions in 'Add'
+            | Add (Expr a) (Expr a)   -- ^ Represents binary addition by wrapping two 'Expr a' expressions in 'Add'
             | Sub (Expr a) (Expr a)   -- ^ Represents binary subtraction by wrapping two 'Expr a' expressions in 'Sub'
             | Sin (Expr a)            -- ^ Represents the trignometric function, sine (sin)
             | Cos (Expr a)            -- ^ Represents the trignometric function, cosine (cos)
@@ -26,7 +26,7 @@ data Expr a = E (Expr a)              -- ^ Represents the natural exponent (e)
             | Var String              -- ^ Represents a variable of type String
             | Const a                 -- ^ Represents a constant of value 'a', where 'a' can be any number
             | Multi (Expr a) (Expr a) -- ^ Represents binary multiplication by wrapping two 'Expr a' expressions in 'Multi'
-  deriving (Eq, Show) -- I'm gonna let GHCi do all the work for "Show".
+  deriving (Eq) -- Show is defined in ExprPretty
 -- But there's a module called ExprPretty.hs that'll make the output look more readable; use it at your own discretion
 
 -- * Section: Auxiliary Functions
