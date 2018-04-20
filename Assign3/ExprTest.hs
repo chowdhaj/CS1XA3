@@ -1,12 +1,12 @@
 module ExprTest where
 
-import ExprDiff
-import ExprParser
-import ExprPretty
-import ExprType
+import           ExprDiff
+import           ExprParser
+import           ExprPretty
+import           ExprType
 
 import qualified Data.Map.Strict as Map
-import Test.QuickCheck
+import           Test.QuickCheck
 
 sampleExpr1 :: Expr Int
 sampleExpr1 = (var "x") !+ (var "y")

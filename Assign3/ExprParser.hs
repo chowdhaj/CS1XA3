@@ -1,9 +1,9 @@
 module ExprParser (parseExprD,parseExprF) where
 
-import           ExprType
+import ExprType
 
-import           Text.Parsec
-import           Text.Parsec.String
+import Text.Parsec.Char
+import Text.Parsec.String
 
 {- | parses an expression to Expr Double
      using the parsec package
