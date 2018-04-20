@@ -17,7 +17,7 @@ This program is a simple math library, made in Haskell, that will assist you wit
   * You can read more about this in Haddock [documentation]
 
 ### How-To 
-###### Honestly, Just Read The Documentation [I'm To Lazy To Finish This]
+###### Honestly, Just Read The Documentation/Comments [I'm To Lazy To Finish This]
 Coming ~~Soon~~ Never 
 
 ### References
