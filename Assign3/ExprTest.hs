@@ -27,6 +27,5 @@ listToExpr1 [x]    = Const x
 listToExpr1 (x:xs) = Add (Const x) (listToExpr1 xs)
 listToExpr1 []     = error "Not list to expression for empty"
 
-
 test1 :: Int -> Bool
 test1 x = eval (Map.fromList [("x",x),("y",-x)]) sampleExpr1 == 0
